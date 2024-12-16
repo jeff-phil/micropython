@@ -19,6 +19,7 @@ jobs:
     - name: "Upload binary"
       uses: actions/upload-artifact@v4
       with:
-          name: "ESP8266_GENERIC-FLASH_1M.bin"
+          name: "ESP8266_GENERIC-FLASH-firmware.bin"
           path: |
-            /home/runner/work/micropython/micropython/ports/esp8266/build-ESP8266_GENERIC-FLASH_1M/firmware.bin
+            /home/runner/work/micropython/micropython/ports/esp8266/build-ESP8266_GENERIC/firmware.bin
+            
