@@ -3,13 +3,9 @@ name: esp8266 port
 on:
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-
 jobs:
   build:
+    if: github.workflow == 'esp8266 port'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
