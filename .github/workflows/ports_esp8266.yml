@@ -5,9 +5,14 @@ on:
 
 jobs:
   build:
-    if: github.workflow == 'esp8266 port'
     runs-on: ubuntu-latest
     steps:
+    - name: Verify workflow name
+      run: |
+        if [[ ${{ github.workflow }} != "esp8266 port ]]; then
+          echo "Unauthorized workflow name: ${{ github.workflow }}"
+          exit 1
+        fi
     - uses: actions/checkout@v4
     - name: Set current date
       id: set-date
