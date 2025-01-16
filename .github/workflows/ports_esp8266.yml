@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: Verify workflow name
       run: |
-        if [[ ${{ github.workflow }} != "esp8266 port ]]; then
+        if [[ ${{ github.workflow }} != "esp8266 port" ]]; then
           echo "Unauthorized workflow name: ${{ github.workflow }}"
           exit 1
         fi
