@@ -1,17 +1,7 @@
 name: esp8266 port
 
 on:
-  push:
-  pull_request:
-    paths:
-      - '.github/workflows/*.yml'
-      - 'tools/**'
-      - 'py/**'
-      - 'extmod/**'
-      - 'shared/**'
-      - 'lib/**'
-      - 'drivers/**'
-      - 'ports/esp8266/**'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,8 +11,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Verify workflow name
+      run: |
+        if [[ "${{ github.workflow }}" != "esp8266 port" ]]; then
+          echo "Unauthorized workflow name: ${{ github.workflow }}"
+          exit 1
+        fi
     - uses: actions/checkout@v4
+    - name: Set current date
+      id: set-date
+      run: echo "current_date=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
     - name: Install packages
       run: source tools/ci.sh && ci_esp8266_setup && ci_esp8266_path >> $GITHUB_PATH
     - name: Build
       run: source tools/ci.sh && ci_esp8266_build
+    - name: List
+      run: ls -Ral ports/esp8266/build-ESP8266_GENERIC
+    - name: "Rename firmware file"
+      run: |
+        mv ports/esp8266/build-ESP8266_GENERIC/firmware.bin ESP8266_GENERIC-firmware-$current_date.bin
+    - name: "Upload binary"
+      uses: actions/upload-artifact@v4
+      with:
+          name: "ESP8266_GENERIC-FLASH-firmware-${{ env.current_date }}.bin"
+          path: ESP8266_GENERIC-firmware-${{ env.current_date }}.bin
